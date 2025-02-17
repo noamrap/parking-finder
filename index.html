@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="he">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
-
         body {
             font-family: 'Rubik', sans-serif;
             background: linear-gradient(135deg, #ff758c, #ff7eb3);
@@ -20,7 +19,6 @@
             direction: rtl;
             overflow: hidden;
         }
-
         .container {
             background: white;
             padding: 25px;
@@ -31,25 +29,15 @@
             transform: scale(0.9);
             animation: fadeIn 1s ease-out forwards;
         }
-
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
         }
-
         h2 {
             margin-bottom: 20px;
             color: #222;
             font-weight: 700;
         }
-
         label, input, select, button {
             width: 100%;
             padding: 10px;
@@ -60,7 +48,6 @@
             display: block;
             text-align: right;
         }
-
         button {
             background: linear-gradient(90deg, #ff4d6d, #ff758c);
             color: white;
@@ -68,11 +55,9 @@
             cursor: pointer;
             transition: 0.3s;
         }
-
-            button:hover {
-                background: linear-gradient(90deg, #ff0033, #ff4d6d);
-            }
-
+        button:hover {
+            background: linear-gradient(90deg, #ff0033, #ff4d6d);
+        }
         .map-container {
             width: 100%;
             height: 300px;
@@ -85,23 +70,27 @@
             position: relative;
             overflow: hidden;
         }
+        .result {
+            display: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #222;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>אפליקציית מקיפנגו למציאת חניה במקיף י'ג</h1>
-        
         <h2>מצא חניה</h2>
         <label for="carType">סוג רכב:</label>
         <input type="text" id="carType" placeholder="הקלד את שם הרכב שלך" required>
-
         <label for="weather">מזג אוויר:</label>
         <select id="weather">
             <option value="שמשי">שמשי</option>
             <option value="גשום">גשום</option>
             <option value="מעונן">מעונן</option>
         </select>
-
         <label for="distance">מרחק מבית הספר:</label>
         <select id="distance">
             <option value="חצי דקה">חצי דקה</option>
@@ -109,7 +98,6 @@
             <option value="3 דקות">3 דקות</option>
             <option value="5 דקות">5 דקות</option>
         </select>
-
         <button onclick="findParking()">חפש חניה</button>
         <div class="map-container" id="map"></div>
         <div class="result" id="result">🚗 נמצאה חניה!</div>
@@ -120,23 +108,26 @@
             let mapContainer = document.getElementById("map");
             mapContainer.style.display = "block";
             setTimeout(() => { mapContainer.style.opacity = "1"; }, 100);
-
             let map = L.map('map').setView([31.960667, 34.827056], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
-
             let marker = L.marker([31.960667, 34.827056]).addTo(map)
                 .bindPopup("🚗 מיקום חניה זמינה!")
                 .openPopup();
+            
+            setTimeout(() => {
+                document.getElementById("result").style.display = "block";
+            }, 2000);
         }
         function findParking() {
+            let carType = document.getElementById("carType").value;
+            if (carType.trim() === "") {
+                alert("אנא הכנס את סוג הרכב שלך.");
+                return;
+            }
+            document.getElementById("result").style.display = "none";
             initMap();
-            let result = document.getElementById("result");
-            result.style.display = "none";
-            setTimeout(() => {
-                result.style.display = "block";
-            }, 3000);
         }
     </script>
 </body>
