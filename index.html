@@ -91,12 +91,16 @@
             <option value="גשום">גשום</option>
             <option value="מעונן">מעונן</option>
         </select>
-        <label for="distance">מרחק מבית הספר:</label>
+        <label for="distance">מרחק מבית הספר (במטרים):</label>
         <select id="distance">
-            <option value="חצי דקה">חצי דקה</option>
-            <option value="דקה">דקה</option>
-            <option value="3 דקות">3 דקות</option>
-            <option value="5 דקות">5 דקות</option>
+            <option value="5">5 מטרים</option>
+            <option value="10">10 מטרים</option>
+            <option value="20">20 מטרים</option>
+            <option value="50">50 מטרים</option>
+            <option value="100">100 מטרים</option>
+            <option value="200">200 מטרים</option>
+            <option value="500">500 מטרים</option>
+            <option value="1000">1000 מטרים</option>
         </select>
         <button onclick="findParking()">חפש חניה</button>
         <div class="map-container" id="map"></div>
