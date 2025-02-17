@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>חיפוש חניה</title>
+    <title>חיפוש חניה - מקיפנגו</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+
         body {
             font-family: 'Rubik', sans-serif;
             background: linear-gradient(135deg, #ff758c, #ff7eb3);
@@ -19,7 +20,8 @@
             direction: rtl;
             overflow: hidden;
         }
-        .container {
+
+        .container, .video-container {
             background: white;
             padding: 25px;
             border-radius: 15px;
@@ -28,16 +30,35 @@
             text-align: center;
             transform: scale(0.9);
             animation: fadeIn 1s ease-out forwards;
+            display: none;
         }
+
+        .start-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
         @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
+
         h2 {
             margin-bottom: 20px;
             color: #222;
             font-weight: 700;
         }
+
         label, input, select, button {
             width: 100%;
             padding: 10px;
@@ -48,6 +69,7 @@
             display: block;
             text-align: right;
         }
+
         button {
             background: linear-gradient(90deg, #ff4d6d, #ff758c);
             color: white;
@@ -55,9 +77,11 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        button:hover {
-            background: linear-gradient(90deg, #ff0033, #ff4d6d);
-        }
+
+            button:hover {
+                background: linear-gradient(90deg, #ff0033, #ff4d6d);
+            }
+
         .map-container {
             width: 100%;
             height: 300px;
@@ -70,6 +94,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .result {
             display: none;
             font-size: 18px;
@@ -77,10 +102,37 @@
             margin-top: 15px;
             color: #222;
         }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="start-container" id="startScreen">
+        <h1>ברוכים הבאים למקיפנגו</h1>
+        <button onclick="showVideo()">💡 מקיפנגו</button>
+    </div>
+
+    <div class="video-container" id="videoScreen" style="display: none;">
+        <video controls id='firstVideo' onended='showSecondButton()' autoplay>
+            <source src="%d7%95%d7%99%d7%93%d7%90%d7%95%20%d7%a9%d7%9c%20WhatsApp%e2%80%8f%202025-02-17%20%d7%91%d7%a9%d7%a2%d7%94%2020.12.34_3fcc1e32.mp4" type="video/mp4">
+            הדפדפן שלך אינו תומך בוידאו.
+        </video>
+        <button id="secondButton" onclick="showSecondVideo()" style="display: none;">אני לא הנהג</button>
+    </div>
+
+    <div class="video-container" id="secondVideoScreen" style="display: none;">
+        <video controls id='secondVideo' onended='showFormButton()' autoplay>
+            <source src="%d7%95%d7%99%d7%93%d7%90%d7%95%20%d7%a9%d7%9c%20WhatsApp%e2%80%8f%202025-02-17%20%d7%91%d7%a9%d7%a2%d7%94%2017.41.59_6dfe243f.mp4" type="video/mp4">
+            הדפדפן שלך אינו תומך בוידאו.
+        </video>
+        <button id="formButton" onclick="showForm()" style="display: none;">העברתי למאור</button>
+    </div>
+
+    <div class="container" id="formScreen" style="display: none;">
         <h1>אפליקציית מקיפנגו למציאת חניה במקיף י'ג</h1>
         <h2>מצא חניה</h2>
         <label for="carType">סוג רכב:</label>
@@ -108,30 +160,38 @@
     </div>
 
     <script>
-        function initMap() {
-            let mapContainer = document.getElementById("map");
-            mapContainer.style.display = "block";
-            setTimeout(() => { mapContainer.style.opacity = "1"; }, 100);
-            let map = L.map('map').setView([31.960667, 34.827056], 15);
+        function showVideo() {
+            document.getElementById("startScreen").style.display = "none";
+            document.getElementById("videoScreen").style.display = "block";
+            document.getElementById("firstVideo").play();
+        }
+        function showSecondVideo() {
+            document.getElementById("videoScreen").style.display = "none";
+            document.getElementById("secondVideoScreen").style.display = "block";
+            document.getElementById("secondVideo").play();
+        }
+        function showForm() {
+            document.getElementById("secondVideoScreen").style.display = "none";
+            document.getElementById("formScreen").style.display = "block";
+        }
+        function showSecondButton() {
+            document.getElementById("secondButton").style.display = "block";
+        }
+        function showFormButton() {
+            document.getElementById("formButton").style.display = "block";
+        }
+        function findParking() {
+            document.getElementById("map").style.display = "block";
+            setTimeout(() => { document.getElementById("map").style.opacity = "1"; }, 100);
+
+            let map = L.map('map').setView([31.960639, 34.827028], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
-            let marker = L.marker([31.960667, 34.827056]).addTo(map)
+
+            let marker = L.marker([31.960639, 34.827028]).addTo(map)
                 .bindPopup("🚗 מיקום חניה זמינה!")
                 .openPopup();
-            
-            setTimeout(() => {
-                document.getElementById("result").style.display = "block";
-            }, 2000);
-        }
-        function findParking() {
-            let carType = document.getElementById("carType").value;
-            if (carType.trim() === "") {
-                alert("אנא הכנס את סוג הרכב שלך.");
-                return;
-            }
-            document.getElementById("result").style.display = "none";
-            initMap();
         }
     </script>
 </body>
